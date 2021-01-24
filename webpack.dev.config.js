@@ -2,12 +2,19 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const projPath = path.resolve(__dirname,'./dist')
 module.exports={
     entry:'./src/index.js',
     output:{
-        filename:'bundle.js',
-        path:path.resolve(__dirname,'./dist'),
-        publicPath:'/dist/'
+        filename:'bundle.[contenthash].js',
+        path:projPath,
+        publicPath:''
+    },
+    devServer:{
+        contentBase:projPath,
+        index:'index.html',
+        port:8081,
+        writeToDisk:true
     },
     mode:'development',
     module:{
