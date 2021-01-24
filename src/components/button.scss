@@ -1,0 +1,12 @@
+$buttonColor:red;
+$textColor:white;
+
+.button{
+    background-color: $buttonColor;
+    color: $textColor;
+    padding: 5px;
+}
+.text{
+    color: rgb(143, 143, 196);
+    font-size: 16px;
+}
