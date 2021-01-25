@@ -2,16 +2,24 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const projPath = path.resolve(__dirname,'./dist')
+const projPath = path.resolve(__dirname,'./dist');
 module.exports={
-    entry:'./src/index.js',
+    entry:{
+        'home':'./src/home.js',
+        'second':'./src/secondPage.js'
+    },
     output:{
-        filename:'bundle.[contenthash].js',
-        path:projPath,
+        filename:'[name].bundle.[contenthash].js',
+        path:path.resolve(__dirname,'./build'),
         publicPath:''
     },
+    optimization:{
+        splitChunks:{
+            chunks:'all'
+        }
+    },
     devServer:{
-        contentBase:projPath,
+        contentBase:path.resolve(__dirname,'./build'),
         index:'index.html',
         port:8081,
         writeToDisk:true
@@ -56,13 +64,20 @@ module.exports={
         ]
     },
     plugins:[
-        new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns:['**/*',path.join(process.cwd(),'extra/**/*')]
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            title:"Home Page",
+            chunks:['home'],
+            template:"src/template.hbs",
+            filename:'index.html',
+            minify:false
         }),
         new HtmlWebpackPlugin({
-            title:"Test App",
-            template:"src/index.hbs",
-            filename:'index.html'
+            title:"Second Page",
+            chunks:['second'],
+            template:"src/template.hbs",
+            filename:'second.html',
+            minify:false
         })
     ]
 

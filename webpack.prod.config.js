@@ -4,11 +4,20 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports={
-    entry:'./src/index.js',
+    entry:{
+        'home':'./src/home.js',
+        'second':'./src/secondPage.js'
+    },
     output:{
-        filename:'bundle.[contenthash].js',
+        filename:'[name].[contenthash].js',
         path:path.resolve(__dirname,'./build'),
         publicPath:'/build/'
+    },
+    optimization:{
+        splitChunks:{
+            chunks:'all',
+            minSize:3000
+        }
     },
     mode:'production',
     module:{
@@ -51,16 +60,22 @@ module.exports={
     },
     plugins:[
         new MiniCSSExtractPlugin({
-            filename:'style.[contenthash].css'
+            filename:'[name].[contenthash].css'
         }),
-        new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns:['**/*',path.join(process.cwd(),'extra/**/*')]
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            title:"Home Page",
+            chunks:['home'],
+            template:"src/template.hbs",
+            filename:'index.html'
         }),
         new HtmlWebpackPlugin({
-            title:"Test App",
-            template:"src/index.hbs",
-            filename:'index.html'
+            title:"Second Page",
+            chunks:['second'],
+            template:"src/template.hbs",
+            filename:'second.html'
         })
+
     ]
 
 }
